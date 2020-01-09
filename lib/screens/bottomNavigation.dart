@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:peach/colors.dart';
 import 'package:peach/screens/Homepage.dart';
 import 'package:peach/screens/Profile.dart';
+import 'package:peach/screens/about.dart';
 import 'package:peach/screens/explore.dart';
 
 class BottomNavigation extends StatefulWidget {
@@ -18,6 +19,7 @@ class BottomNavigationState extends State<BottomNavigation> {
     Explore(),
     Homepage(),
     Profile(),
+    About()
   ];
 
   void onTappedItem(int index) {
@@ -47,6 +49,11 @@ class BottomNavigationState extends State<BottomNavigation> {
           BottomNavigationBarItem(
             icon: Icon(Icons.account_circle),
             title: Text('Profile'),
+            backgroundColor: colorPeach
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.book),
+            title: Text('About'),
             backgroundColor: colorPeach
           )
         ],

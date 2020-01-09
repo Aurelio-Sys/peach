@@ -3,6 +3,7 @@ import 'package:peach/colors.dart';
 import 'package:peach/screens/Profile.dart';
 import 'package:peach/screens/explore.dart';
 import 'package:peach/screens/loginPage.dart';
+import 'package:peach/screens/profileDetail.dart';
 import 'package:splashscreen/splashscreen.dart';
 import 'package:peach/screens/bottomNavigation.dart';
 import 'package:peach/screens/Homepage.dart';
@@ -21,7 +22,8 @@ void main() {
       BottomNavigation.routeName : (context) => BottomNavigation(),
       Explore.routeName : (context) => Explore(),
       Profile.routeName : (context) => Profile(),
-      LoginPage.routeName : (context) => LoginPage()
+      LoginPage.routeName : (context) => LoginPage(),
+      ProfileDetail.routeName : (context) => ProfileDetail()
     },
   ));
 }

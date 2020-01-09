@@ -2,9 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:peach/colors.dart';
 import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:peach/screens/profileDetail.dart';
+
+// import 'package:peach/model/post.dart';
+// import 'package:peach/screens/profileDetail.dart';
 
 class Homepage extends StatefulWidget {
   static const routeName = '/Homepage';
+  
   
   @override
   HomepageState createState() => new HomepageState();
@@ -12,7 +18,26 @@ class Homepage extends StatefulWidget {
 
 class HomepageState extends State<Homepage> {
 
-  // List data;
+  var url = 'http://apiforpeach.000webhostapp.com/API/getPost.php';
+
+  List post;
+
+  fetchPost() async {
+    final res = await http.get(url);
+    setState(() {
+      var dataConvertedJSON = json.decode(res.body);
+      post = dataConvertedJSON;
+    });
+  }
+  @override
+  void initState() {
+    super.initState();
+    fetchPost();
+    setState(() {
+      
+    });
+  }
+  
   
   static final List<String> photos = [
     'assets/images/Alice(1).png',
@@ -84,16 +109,13 @@ class HomepageState extends State<Homepage> {
               ),
               Column(
                 children: <Widget>[
-                  FutureBuilder(
-                    future: DefaultAssetBundle.of(context).loadString('repository/dataRepository.json'),
-                    builder: (context, snapshot) {
-                      var newData = json.decode(snapshot.data.toString());
-                      return ListView.builder(
-                        physics: ClampingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: newData == null ? 0 : newData.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Card(
+                  Container(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: ClampingScrollPhysics(),
+                      itemCount: post == null ? 0 : post.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Card(
                             margin: EdgeInsets.all(8),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -110,12 +132,16 @@ class HomepageState extends State<Homepage> {
                                           padding: EdgeInsets.all(5),
                                         ),
                                         FloatingActionButton(
+                                          heroTag: post[index]['username'],
                                           onPressed: () {
-                                            // Navigator.popAndPushNamed(context, ProfileDetail.routeName);
-                                            print('tapped');
+                                            // Navigator.push(context, 
+                                            // MaterialPageRoute(
+                                            //   builder: (context) => ProfileDetail(post: post[index])
+                                            // ));
+                                            // print('tapped');
                                           },
                                           child: ClipOval(
-                                            child: Image.asset(newData[index]['profilePic'],
+                                            child: Image.network(post[index]['profilePic'],
                                             fit: BoxFit.cover,
                                             width: 40,
                                             height: 40,
@@ -131,16 +157,12 @@ class HomepageState extends State<Homepage> {
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: <Widget>[
-                                        Text(newData[index]['username'],
+                                        Text(post[index]['username'],
                                           style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.bold
                                             ),
                                           ),
-                                        Text(newData[index]['posted'],
-                                        style: TextStyle(
-                                          fontSize: 10
-                                        ),)
                                       ],
                                     ),
                                   ],
@@ -151,7 +173,7 @@ class HomepageState extends State<Homepage> {
                                 Card(
                                   semanticContainer: true,
                                   clipBehavior: Clip.antiAliasWithSaveLayer,
-                                  child: Image.asset(newData[index]['image'],
+                                  child: Image.network(post[index]['image'],
                                   fit: BoxFit.fill,),
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10),
                                   ),
@@ -164,16 +186,15 @@ class HomepageState extends State<Homepage> {
                               ],
                             ),
                           );
-                        },
-                      );
-                    },
-                  ),
-                ],
+                      },
+                    ),
+                  )
+                    ]
+                  )
+                ],    
               )
             ],
-          ),
-        ],
-      ),
+          ),    
     );
   }
 }
